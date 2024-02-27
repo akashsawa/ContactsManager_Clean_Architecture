@@ -9,6 +9,10 @@ using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using CrudExample.Middleware;
 using ContactsManager.Core.Domain.IdentityEntities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 //add services into ioc container
@@ -71,9 +75,27 @@ builder.Services.AddDbContext<ApplicationDBContext>(
 //Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=PersonsDatabase;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False
 
 //addidentity
-builder.Services.AddIdentity<ApplicationUser, ApplicationRole>().AddEntityFrameworkStores<ApplicationDBContext>().AddUserStore<ApplicationUser, ApplicationRole,ApplicationDBContext, Guid>(); // hey asp.net core i would like to add identity  services , and the model class for storing user details its applicationuser.
-//addidenttiy
 
+//password complexity
+builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options => { options.Password.RequiredLength = 5; options.Password.RequireNonAlphanumeric = false; options.Password.RequireUppercase = false; options.Password.RequireLowercase = true; options.Password.RequireDigit = false; options.Password.RequiredUniqueChars = 3; /*eg: ab12ab */ }).AddEntityFrameworkStores<ApplicationDBContext>().AddDefaultTokenProviders().AddUserStore<UserStore<ApplicationUser, ApplicationRole, ApplicationDBContext, Guid>>().AddRoleStore<RoleStore<ApplicationRole, ApplicationDBContext, Guid>>();
+//password complexity
+// hey asp.net core i would like to add identity  services , and the model class for storing user details we are using class applicationuser. using applicationuser class for creating users table and applicationrole class for creating roles table and use ApplicationDBContext. 
+// AddUserStore<ApplicationUser, ApplicationRole,ApplicationDBContext, Guid>()  :  use this method for providing the repository layer.
+//AddRoleStore<RoleStore< ApplicationRole, ApplicationDBContext, Guid>>() : form manipulating rolesstore data.
+//AddDefaultTokenProviders : at time of login email confirmation or phone verification we have to generate tokens randomly at run time and send the same token to user so to generate the sam e tokens we have to add this statement.                                                                                                                             //addidenttiy
+
+
+//for authentication/authorization
+builder.Services.AddAuthorization(options =>
+{
+    options.FallbackPolicy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+}); // means request should have identity cookie for accessing any action method if not then its assumed as unauthorized. this will add the policy for all the actionmethod sincluding homecontrollers and 
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Account/Login";
+}); // means if user is not logfed in then automatically redirect to this url.
+//for authentication/authorization
 
 //http logging options
 builder.Services.AddHttpLogging(options =>
@@ -87,6 +109,7 @@ var app = builder.Build();
 //idiagnosticcontext
 app.UseSerilogRequestLogging();
 //idiagnosticcontext
+
 
 //http logging
 app.UseHttpLogging();
@@ -119,8 +142,21 @@ if (builder.Environment.IsEnvironment("Test") == false)
 }
 
 app.UseStaticFiles();
-app.UseRouting();
-app.MapControllers();
+
+//for signin manager : this is for reading the identity cookie and can extract the user id and username form that.
+
+
+
+//for signin manager 
+
+app.UseRouting(); ///identifying action methods based on the route.
+
+///for authorization
+app.UseAuthentication(); //reading identity cookie
+app.UseAuthorization(); //validates access permissions of the user.
+//for authorization
+
+app.MapControllers(); // executes filter pipeline (action + filters)
 app.Run();
 
 // for integration testing

@@ -9,18 +9,18 @@ namespace ContactsManager.Infrastructure.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<Guid>(
-                name: "CountryID",
-                table: "Persons",
-                type: "uniqueidentifier",
-                nullable: true);
+            //migrationBuilder.AddColumn<Guid>(
+            //    name: "CountryID",
+            //    table: "Persons",
+            //    type: "uniqueidentifier",
+            //    nullable: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "CountryID",
-                table: "Persons");
+            //migrationBuilder.DropColumn(
+            //    name: "CountryID",
+            //    table: "Persons");
         }
     }
 }

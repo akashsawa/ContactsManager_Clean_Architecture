@@ -4,6 +4,7 @@ using Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ContactsManager.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240226120820_identitytables2")]
+    partial class identitytables2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -130,34 +132,7 @@ namespace ContactsManager.Infrastructure.Migrations
 
                     b.HasKey("CountryID");
 
-                    b.ToTable("Countries", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            CountryID = new Guid("14629847-905a-4a0e-9abe-80b61655c5cb"),
-                            CountryName = "Philippines"
-                        },
-                        new
-                        {
-                            CountryID = new Guid("56bf46a4-02b8-4693-a0f5-0a95e2218bdc"),
-                            CountryName = "Thailand"
-                        },
-                        new
-                        {
-                            CountryID = new Guid("12e15727-d369-49a9-8b13-bc22e9362179"),
-                            CountryName = "China"
-                        },
-                        new
-                        {
-                            CountryID = new Guid("8f30bedc-47dd-4286-8950-73d8a68e5d41"),
-                            CountryName = "Palestinian Territory"
-                        },
-                        new
-                        {
-                            CountryID = new Guid("501c6d33-1bbe-45f1-8fbd-2275913c6218"),
-                            CountryName = "China"
-                        });
+                    b.ToTable("Countries");
                 });
 
             modelBuilder.Entity("Entities.Person", b =>
@@ -192,128 +167,13 @@ namespace ContactsManager.Infrastructure.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("TIN")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("varchar(8)")
-                        .HasDefaultValue("ABC12345")
-                        .HasColumnName("TaxIdentificationNumbers");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Personid");
 
                     b.HasIndex("CountryId");
 
-                    b.ToTable("Persons", (string)null);
-
-                    b.HasCheckConstraint("CHK_TIN", "len([TaxIdentificationNumbers]) = 8");
-
-                    b.HasData(
-                        new
-                        {
-                            Personid = new Guid("c03bbe45-9aeb-4d24-99e0-4743016ffce9"),
-                            Address = "4 Parkside Point",
-                            Email = "mwebsdale0@people.com.cn",
-                            Gender = "Female",
-                            PersonName = "Marguerite",
-                            ReceiveNewsLetters = false
-                        },
-                        new
-                        {
-                            Personid = new Guid("c3abddbd-cf50-41d2-b6c4-cc7d5a750928"),
-                            Address = "6 Morningstar Circle",
-                            Email = "ushears1@globo.com",
-                            Gender = "Female",
-                            PersonName = "Ursa",
-                            ReceiveNewsLetters = false
-                        },
-                        new
-                        {
-                            Personid = new Guid("c6d50a47-f7e6-4482-8be0-4ddfc057fa6e"),
-                            Address = "73 Heath Avenue",
-                            Email = "fbowsher2@howstuffworks.com",
-                            Gender = "Male",
-                            PersonName = "Franchot",
-                            ReceiveNewsLetters = true
-                        },
-                        new
-                        {
-                            Personid = new Guid("d15c6d9f-70b4-48c5-afd3-e71261f1a9be"),
-                            Address = "83187 Merry Drive",
-                            Email = "asarvar3@dropbox.com",
-                            Gender = "Male",
-                            PersonName = "Angie",
-                            ReceiveNewsLetters = true
-                        },
-                        new
-                        {
-                            Personid = new Guid("89e5f445-d89f-4e12-94e0-5ad5b235d704"),
-                            Address = "50467 Holy Cross Crossing",
-                            Email = "ttregona4@stumbleupon.com",
-                            Gender = "Gender",
-                            PersonName = "Tani",
-                            ReceiveNewsLetters = false
-                        },
-                        new
-                        {
-                            Personid = new Guid("2a6d3738-9def-43ac-9279-0310edc7ceca"),
-                            Address = "97570 Raven Circle",
-                            Email = "mlingfoot5@netvibes.com",
-                            Gender = "Male",
-                            PersonName = "Mitchael",
-                            ReceiveNewsLetters = false
-                        },
-                        new
-                        {
-                            Personid = new Guid("29339209-63f5-492f-8459-754943c74abf"),
-                            Address = "57449 Brown Way",
-                            Email = "mjarrell6@wisc.edu",
-                            Gender = "Male",
-                            PersonName = "Maddy",
-                            ReceiveNewsLetters = true
-                        },
-                        new
-                        {
-                            Personid = new Guid("ac660a73-b0b7-4340-abc1-a914257a6189"),
-                            Address = "4 Stuart Drive",
-                            Email = "pretchford7@virginia.edu",
-                            Gender = "Female",
-                            PersonName = "Pegeen",
-                            ReceiveNewsLetters = true
-                        },
-                        new
-                        {
-                            Personid = new Guid("012107df-862f-4f16-ba94-e5c16886f005"),
-                            Address = "413 Sachtjen Way",
-                            Email = "hmosco8@tripod.com",
-                            Gender = "Male",
-                            PersonName = "Hansiain",
-                            ReceiveNewsLetters = true
-                        },
-                        new
-                        {
-                            Personid = new Guid("cb035f22-e7cf-4907-bd07-91cfee5240f3"),
-                            Address = "484 Clarendon Court",
-                            Email = "lwoodwing9@wix.com",
-                            Gender = "Male",
-                            PersonName = "Lombard",
-                            ReceiveNewsLetters = false
-                        },
-                        new
-                        {
-                            Personid = new Guid("28d11936-9466-4a4b-b9c5-2f0a8e0cbde9"),
-                            Address = "2 Warrior Avenue",
-                            Email = "mconachya@va.gov",
-                            Gender = "Female",
-                            PersonName = "Minta",
-                            ReceiveNewsLetters = true
-                        },
-                        new
-                        {
-                            Personid = new Guid("a3b9833b-8a4d-43e9-8690-61e08df81a9a"),
-                            Address = "9334 Fremont Street",
-                            Email = "vklussb@nationalgeographic.com",
-                            Gender = "Female",
-                            PersonName = "Verene",
-                            ReceiveNewsLetters = true
-                        });
+                    b.ToTable("Persons");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>

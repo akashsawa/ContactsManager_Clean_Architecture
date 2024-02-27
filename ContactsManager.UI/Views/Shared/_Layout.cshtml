@@ -26,37 +26,86 @@
             <div class="navbar-brand">
                 <img src="~/logo.png" width="25" asp-append-version="true" /> @* for updating new image in the wwwroot folder. *@
             </div>
-            <ul>
+            <div class="navbar account-links">
 
-                <li>
-                    @* <div class="navbar account-links"> *@
-                        <a asp-controller="Persons" asp-action="Index">Persons</a>
-                        <a asp-controller="Countries" asp-action="UploadFromExcel">Upload Countries</a>
+
+
+                <ul>
+
+                    <li>
+                        @* <div class="navbar account-links"> *@
+                            @* FOR NAV-ACTIVE LINK *@
+                        @if (ViewBag.CurrentUrl == "~/Persons/Index")
+                        {
+                            <a asp-controller="Persons" asp-action="Index" class="nav-active">Persons</a>
+                        }
+                        else
+                        {
+                            <a asp-controller="Persons" asp-action="Index">Persons</a>
+                        }
+
+                        @if (ViewBag.CurrentUrl == "~/Countries/UploadFromExcel")
+                        {
+                            <a asp-controller="Countries" asp-action="UploadFromExcel" class="nav-active">Upload Countries</a>
+                        }
+                        else
+                        {
+                            <a asp-controller="Countries" asp-action="UploadFromExcel">Upload Countries</a>
+                        }
+                        @* FOR NAV-ACTIVE LINK *@
 
                         @* <div class="account-links-right">
-                            <a asp-controller="Account" asp-action="Register">REGISTER</a>
-                            <a asp-controller="Account" asp-action="Login">LOGIN</a>
-                        </div> *@
-                    @* </div> *@
-                </li>
-
-            </ul>
-
-            <ul>
-
-                <li>
-                    @* <div class="navbar account-links"> *@
-                    
-
-                    <div class="account-links-right">
                         <a asp-controller="Account" asp-action="Register">REGISTER</a>
                         <a asp-controller="Account" asp-action="Login">LOGIN</a>
-                    </div>
-                    @* </div> *@
-                </li>
+                        </div> *@
+                        @* </div> *@
+                    </li>
 
-            </ul>
+                </ul>
 
+                <ul>
+
+
+                    @* for login/logout functionality *@
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li>
+                            @User.Identity?.Name
+                        </li>
+                        <li><a asp-controller="Account" asp-action="Logout">LOGOUT</a></li>
+                    }
+                    else
+                    {
+                        <li>
+                            @* FOR NAV-ACTIVE LINK *@
+                            @if (ViewBag.CurrentUrl == "~/Account/Register")
+                            {
+
+                                <a asp-controller="Account" asp-action="Register" class="nav-active">REGISTER</a>
+                            }
+                            else
+                            {
+                                <a asp-controller="Account" asp-action="Register">REGISTER</a>
+                            }
+
+                            @if (ViewBag.CurrentUrl == "~/Account/Login")
+                            {
+                                <a asp-controller="Account" asp-action="Login" class="nav-active">LOGIN</a>
+                            }
+                            else
+                            {
+                                <a asp-controller="Account" asp-action="Login">LOGIN</a>
+                            }
+                            @* FOR NAV-ACTIVE LINK *@
+                        </li>
+                    }
+                    @* for login/logout functionality *@
+
+
+                </ul>
+
+
+            </div>
 
             @* <div class="navbar account-links">
             <ul>

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ContactsManager.Core.DTO
 {
@@ -14,6 +15,11 @@ namespace ContactsManager.Core.DTO
 
         [Required(ErrorMessage = "Email can't be blank")]
         [EmailAddress(ErrorMessage ="Email should be in a proper email address format !")]
+
+        //for remote validation
+        [Remote(action: "IsEmailAlreadyRegistered", controller:"Account", ErrorMessage ="Email already exists !...")] // this will automatically generate javascript code .
+        //for remote validation
+
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Phone Number can't be blank")]
@@ -27,6 +33,7 @@ namespace ContactsManager.Core.DTO
 
         [Required(ErrorMessage = "Password can't be blank")]
         [DataType(DataType.Password)]
+        [Compare("Password", ErrorMessage ="Password did not matched !")]
         public string ConfirmPassword { get; set; }
     }
 }
