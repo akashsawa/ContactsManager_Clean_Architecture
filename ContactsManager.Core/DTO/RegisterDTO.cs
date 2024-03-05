@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
+using ContactsManager.Core.Enums;
 
 namespace ContactsManager.Core.DTO
 {
@@ -35,5 +36,7 @@ namespace ContactsManager.Core.DTO
         [DataType(DataType.Password)]
         [Compare("Password", ErrorMessage ="Password did not matched !")]
         public string ConfirmPassword { get; set; }
+
+        public UserTypeOptions UserType { get; set; } = UserTypeOptions.User;
     }
 }

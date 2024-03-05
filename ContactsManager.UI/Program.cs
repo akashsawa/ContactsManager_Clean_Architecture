@@ -39,6 +39,8 @@ builder.Host.UseSerilog((HostBuilderContext context, IServiceProvider services, 
 
 builder.Services.AddControllersWithViews();
 
+
+
 builder.Services.AddScoped<ICountriesRepository, CountriesRepository>();
 
 builder.Services.AddScoped<IPersonsRepository, PersonsRepository>();
@@ -89,7 +91,19 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options => { opti
 builder.Services.AddAuthorization(options =>
 {
     options.FallbackPolicy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
-}); // means request should have identity cookie for accessing any action method if not then its assumed as unauthorized. this will add the policy for all the actionmethod sincluding homecontrollers and 
+
+    //for CUSTOM AUTHORIZATION POLICIES
+    options.AddPolicy("NotAuthenticated", policy =>
+    {
+        policy.RequireAssertion(context =>
+        {
+            return !context.User.Identity.IsAuthenticated;  // means user has access to action method , and if false means there is no access.*/
+            /*return true;*/
+        });
+    });
+    //for CUSTOM AUTHORIZATION POLICIES
+
+}); // means request should have identity cookie for accessing any action method if not then its assumed as unauthorized. this will add the policy for all the actionmethod sincluding homecontrollers in controller and personscontroller
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
@@ -105,6 +119,11 @@ builder.Services.AddHttpLogging(options =>
 //http logging options
 
 var app = builder.Build();
+
+//HTTPS
+app.UseHsts(); // hsts: http strict transport security
+app.UseHttpsRedirection();
+//HTTPS
 
 //idiagnosticcontext
 app.UseSerilogRequestLogging();
@@ -157,6 +176,24 @@ app.UseAuthorization(); //validates access permissions of the user.
 //for authorization
 
 app.MapControllers(); // executes filter pipeline (action + filters)
+
+//conventional roiuting  : here after using this we dont need to add [route] over the controller class.
+//app.UseEndpoints(endpoints =>
+//{
+//    endpoints.MapControllerRoute(name: "default", pattern: "{controller}/{action}/{id?}"); // means id is optional to pass.
+//});
+
+//areas conventional routing
+app.UseEndpoints(options =>
+{
+    options.MapControllerRoute(
+        name: "areas", pattern: "{area:exists}/{controller=Home}/{action=Index}"); // area:exists means area name is requried its mandatory . exists is predefined route constraint which says this parameter (area) is mandatory. "Home" controller and "Index" action method are default .
+    // eg. :Admin/Home/Index
+});
+//areas conventional routing
+
+//conventional routing 
+
 app.Run();
 
 // for integration testing

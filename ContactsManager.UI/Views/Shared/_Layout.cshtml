@@ -34,7 +34,7 @@
 
                     <li>
                         @* <div class="navbar account-links"> *@
-                            @* FOR NAV-ACTIVE LINK *@
+                        @* FOR NAV-ACTIVE LINK *@
                         @if (ViewBag.CurrentUrl == "~/Persons/Index")
                         {
                             <a asp-controller="Persons" asp-action="Index" class="nav-active">Persons</a>
@@ -73,6 +73,13 @@
                             @User.Identity?.Name
                         </li>
                         <li><a asp-controller="Account" asp-action="Logout">LOGOUT</a></li>
+
+                        //for Admin area:
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li><a asp-controller="Home" asp-action="Index" asp-area="Admin">Admin</a></li>
+                        }
+                        //for Admin area:
                     }
                     else
                     {
