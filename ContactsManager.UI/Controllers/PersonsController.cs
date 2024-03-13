@@ -68,6 +68,8 @@ namespace CrudExample.Controllers
             List<PersonResponse> sortedPersons = await _personsSorterService.GetSortedPersons(persons, sortBy, sortOrder);
             ViewBag.CurrentSortBy = sortBy;
             ViewBag.CurrentSortOrder = sortOrder.ToString();
+
+
             return View(sortedPersons);
         }
 

@@ -63,7 +63,7 @@ namespace ContactsManager.UI.Controllers
 
             IdentityResult result = await _userManager.CreateAsync(user, registerDTO.Password); // usermanager allows to add ,delete, update the user data. here hashed password will be stored which is sha encrypted so original password cannot be seen by anyone.
 
-
+             
 
             if (result.Succeeded)
             {

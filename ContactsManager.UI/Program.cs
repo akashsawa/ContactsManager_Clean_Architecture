@@ -96,7 +96,7 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("NotAuthenticated", policy =>
     {
         policy.RequireAssertion(context =>
-        {
+        { 
             return !context.User.Identity.IsAuthenticated;  // means user has access to action method , and if false means there is no access.*/
             /*return true;*/
         });
